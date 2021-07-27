@@ -4,7 +4,7 @@ function Home() {
   return (
     <div>
       <div>Home component</div>
-      <button onClick={() => alert('eo')}>Alert</button>
+      <button onClick={() => alert('Yep')}>Does JS works?</button>
     </div>
   )
 }
