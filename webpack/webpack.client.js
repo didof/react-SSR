@@ -6,7 +6,7 @@ const clientConfig = {
   entry: paths.client.index,
 
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.client.js',
     path: paths.client.outputPath,
   },
 }

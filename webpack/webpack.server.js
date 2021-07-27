@@ -9,7 +9,7 @@ const serverConfig = {
   entry: paths.server.index,
 
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.server.js',
     path: paths.server.outputPath,
   },
 

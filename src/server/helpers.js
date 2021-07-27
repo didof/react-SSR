@@ -1,7 +1,8 @@
-import opener from 'opener'
+// import opener from 'opener'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import Home from '../client/components/Home'
+import Routes from '../client/Routes'
+import { StaticRouter } from 'react-router-dom'
 
 export function openBrowser() {
   const { PORT } = process.env
@@ -9,8 +10,14 @@ export function openBrowser() {
   // opener(`http://localhost:${PORT}`)
 }
 
-export default function renderer() {
-  const content = renderToString(<Home />)
+export default function renderer(path) {
+  const context = {}
+
+  const content = renderToString(
+    <StaticRouter location={path} context={context}>
+      <Routes />
+    </StaticRouter>
+  )
 
   return generateHTML(content)
 }
@@ -26,7 +33,7 @@ function generateHTML(inject) {
   </head>
   <body>
     <div id="__root">${inject}</div>
-    <script src="bundle.js" async></script>
+    <script src="bundle.client.js" async></script>
   </body>
   </html>
   `

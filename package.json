@@ -7,7 +7,7 @@
         "dev": "npm-run-all --parallel dev:*",
         "dev:build-server": "webpack --config webpack/webpack.server.js",
         "dev:build-client": "webpack --config webpack/webpack.client.js",
-        "dev:server": "nodemon --watch build --watch public --exec \"node build/bundle.js\""
+        "dev:server": "nodemon --watch build --watch public --exec \"node build/bundle.server.js\""
     },
     "author": "didof",
     "license": "ISC",
@@ -35,7 +35,7 @@
         "react-helmet": "5.2.0",
         "react-redux": "5.0.6",
         "react-router-config": "1.0.0-beta.4",
-        "react-router-dom": "4.2.2",
+        "react-router-dom": "^5.2.0",
         "redux": "3.7.2",
         "redux-thunk": "2.2.0",
         "serialize-javascript": "1.4.0",
