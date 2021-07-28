@@ -1,15 +1,18 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
 import Home from './components/Home'
 import UsersList from './components/UsersList'
+import { renderRoutes } from 'react-router-config'
 
-function Routes() {
-  return (
-    <Switch>
-      <Route exact path='/' component={Home} />
-      <Route exact path='/users' component={UsersList} />
-    </Switch>
-  )
-}
+const Routes = renderRoutes([
+  {
+    path: '/',
+    component: Home,
+    exact: true,
+  },
+  {
+    path: '/users',
+    component: UsersList,
+    exact: false,
+  },
+])
 
 export default Routes

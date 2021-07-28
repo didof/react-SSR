@@ -14,7 +14,7 @@ const rootElement = document.getElementById('__root')
 ReactDOM.hydrate(
   <Provider store={createStore()}>
     <BrowserRouter>
-      <Routes />
+      <div>{Routes}</div>
     </BrowserRouter>
   </Provider>,
   rootElement

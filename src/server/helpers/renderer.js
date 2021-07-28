@@ -10,7 +10,7 @@ function renderer(path, store) {
   const content = renderToString(
     <Provider store={store}>
       <StaticRouter location={path} context={context}>
-        <Routes />
+        <div>{Routes}</div>
       </StaticRouter>
     </Provider>
   )
