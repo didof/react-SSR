@@ -1,6 +1,6 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import Routes from '../../client/Routes'
+import { Routes } from '../../client/Routes'
 import { StaticRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 
