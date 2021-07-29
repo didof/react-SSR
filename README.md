@@ -14,7 +14,7 @@ The App is injected in an HTML file that will be sent to the client. This contai
 
 - The App inside a `div#__root`
 - A `script` that requests the bundled client-side version of the app from `/public`
-- The serialized redux initialState appended to the window.object (used to sync the client-side redux to the server
+- The redux initialState appended to the window object as `window.__INITIAL__STATE__`. It is serialized to mitigate XSS attacks.
 
 Still on the server, `StaticRouter` receives the requested `path` (taken from `req`) and decides which page to render in the `renderToString` moment.
 On the browser the good ol' `BrowserRouter` is in charge of the routing in a SPA fashion.
