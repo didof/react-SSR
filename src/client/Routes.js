@@ -1,18 +1,18 @@
-import Home from './components/Home'
-import UsersList from './components/UsersList'
+import Index from './pages/index'
+import Users from './pages/users'
 import { renderRoutes, matchRoutes } from 'react-router-config'
 
 const routesConfig = [
   {
     loadData: () => {},
     path: '/',
-    component: Home,
+    component: Index,
     exact: true,
   },
   {
-    loadData: UsersList.loadData,
+    loadData: Users.loadData,
     path: '/users',
-    component: UsersList,
+    component: Users,
     exact: false,
   },
 ]

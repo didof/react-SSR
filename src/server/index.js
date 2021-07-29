@@ -8,6 +8,9 @@ import {
 import { openBrowser } from './helpers/opener'
 import createStore from './helpers/createStore'
 import { matchPath } from '../client/Routes'
+import * as check from './helpers/check'
+
+import routesGenerator from './routesGenerator'
 
 import 'babel-polyfill'
 
@@ -15,14 +18,16 @@ const app = express()
 
 app.use(express.static('public'))
 
+// const routes = routesGenerator()
+
 app.get('*', (req, res) => {
   const { path } = req
 
   const store = createStore()
 
-  const collectLoadData = createLoadDataCollector(store)
+  const collectPrepopulate = createPrepopulateCollector(store)
 
-  const loadDataPromises = matchPath(path).map(collectLoadData)
+  const loadDataPromises = matchPath(path).map(collectPrepopulate)
 
   Promise.all(loadDataPromises).then(() => {
     const HTMLGenerator = createHTMLGenerator(store)
@@ -38,8 +43,11 @@ app.get('*', (req, res) => {
 
 app.listen(process.env.RENDERER_SERVER_PORT, openBrowser)
 
-function createLoadDataCollector(store) {
-  return function collectLoadData({ route }) {
-    return route.loadData(store)
+function createPrepopulateCollector(store) {
+  const checkPrepopulate = check.existsAndIsFunction('prepopulate')
+
+  return function collectPrepopulatePromises({ route }) {
+    if (checkPrepopulate(route)) return route.prepopulate(store)
+    return null
   }
 }

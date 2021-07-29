@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { fetchUsers } from '../actions'
 import { Link } from 'react-router-dom'
 
-function UsersList({ users, fetchUsers }) {
+function Users({ users, fetchUsers }) {
   React.useEffect(() => {
     fetchUsers()
   }, [])
@@ -15,23 +15,18 @@ function UsersList({ users, fetchUsers }) {
   return (
     <div>
       <Link to='/'>Home</Link>
-      <div>UsersList component</div>
+      <div>Users component</div>
       <ul>{users.map(toListItem)}</ul>
     </div>
   )
 }
 
-UsersList.loadData = function UsersListLoadData(store) {
+Users.prepopulate = function UsersPrepopulate(store) {
   return store.dispatch(fetchUsers())
 }
 
-export default connect(mapStateToProps, { fetchUsers })(UsersList)
+export default connect(mapStateToProps, { fetchUsers })(Users)
 
 function mapStateToProps({ users }) {
   return { users }
-}
-
-function clientSide(fn) {
-  if (typeof window === 'undefined') return
-  return fn
 }
