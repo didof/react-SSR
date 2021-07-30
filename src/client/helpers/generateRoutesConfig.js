@@ -1,4 +1,4 @@
-import routesConfig from '../../server/.framework/routes.config.json'
+import routesConfig from '../../.framework/routes.config.json'
 import { renderRoutes } from 'react-router-config'
 
 function generateRoutesConfig() {

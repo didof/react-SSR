@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 const pagesDir = path.join(process.cwd(), 'src', 'client', 'pages')
-const frameworkDir = path.join(process.cwd(), 'src', 'server', '.framework')
+const frameworkDir = path.join(process.cwd(), 'src', '.framework')
 
 // TODO compose
 const filenames = fs.readdirSync(pagesDir)
