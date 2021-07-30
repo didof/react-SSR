@@ -7,9 +7,9 @@ import {
 } from './helpers/renderer'
 import { openBrowser } from './helpers/opener'
 import createStore from './helpers/createStore'
-import { matchPath } from '../client/Routes'
 import * as check from './helpers/check'
 import routesConfig from './routesGenerator'
+import { matchRoutes } from 'react-router-config'
 
 import 'babel-polyfill'
 
@@ -24,7 +24,9 @@ app.get('*', (req, res) => {
 
   const collectPrepopulate = createPrepopulateCollector(store)
 
-  const prepopulatePromises = matchPath(path).map(collectPrepopulate)
+  const prepopulatePromises = matchRoutes(routesConfig, path).map(
+    collectPrepopulate
+  )
 
   Promise.all(prepopulatePromises).then(() => {
     const HTMLGenerator = createHTMLGenerator(store)
