@@ -17,12 +17,16 @@ const app = express()
 
 app.use(express.static('public'))
 
+app.get('/favicon.ico', (req, res) => {
+  res.status(200).send()
+})
+
 app.get('*', (req, res) => {
   const { path } = req
 
   const store = createStore()
 
-  const collectPrepopulate = createPrepopulateCollector(store)
+  const collectPrepopulate = makePrepopulateCollector(store)
 
   const prepopulatePromises = matchRoutes(routesConfig, path).map(
     collectPrepopulate
@@ -43,10 +47,10 @@ app.get('*', (req, res) => {
 
 app.listen(process.env.RENDERER_SERVER_PORT, openBrowser)
 
-function createPrepopulateCollector(store) {
+function makePrepopulateCollector(store) {
   const checkPrepopulate = check.existsAndIsFunction('prepopulate')
 
-  return function collectPrepopulatePromises({ route }) {
+  return function collectPrepopulatePromise({ route }) {
     if (checkPrepopulate(route.component))
       return route.component.prepopulate(store)
     return null

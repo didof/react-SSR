@@ -9,6 +9,7 @@ function Users() {
   const dispatch = useDispatch()
 
   React.useEffect(() => {
+    if (users.length > 0) return
     dispatch(fetchUsers())
   }, [])
 

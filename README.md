@@ -30,17 +30,14 @@ It's a standard React App but with few noteworthy exceptions.
 
 A further express server mocks up a database an the relative API. The redux actions take here the data.
 
+### Features
+
+- _Prepopulation_: A `<Link >` component accepts a boolean prop named `prepopulate`. If the Renderer Server meets it during the `renderToString` phase, it will call the `prepopulate` static method associated to the component relative to that route. Thus, the redux store will be already filled up and, in case the user visit that route, the client won't need to wait for the fetching since it already happened server-side.
+
+- _fs API_: The route configuration is created on the server. It reads the content of the _pages_ dir and creates a `.json` file that will be used by the client to sync to the server-renderer html.
+
 ## Todo
 
 - Update _redux_ to the modern version
 
-- prevent the fetching in useEffect if already SS fetched
-
-- prepopulateRedux - Promise.all of all serverInit static method, prepopulate redux
-  pass an array of actions, store dispatch is called in Promise.all
-
-- runOnlyIfMatch - Call this only if the url match this page
-  pass the store to allow dispatching but anything is returned is injected as prop
-  and some default props are injected (such as: serverSideRendered = true -> don't call useEffect)
-
-- Use fs to setup routing (in a NextJS/NuxtJS fashion)
+- serverBoot - Promise.all of all prepopulate static method and put in the store

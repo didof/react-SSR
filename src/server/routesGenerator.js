@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import { existsAndIsFunction } from './helpers/check'
 
 const pagesDir = path.join(process.cwd(), 'src', 'client', 'pages')
 const frameworkDir = path.join(process.cwd(), 'src', '.framework')
@@ -11,7 +12,7 @@ const mapped = mapFilenameToPage(filenames)
 const routesConfig = generateRoutesConfig(mapped)
 export default routesConfig
 
-writeRoutesConfigJSON(filenames)
+writeRoutesConfigJSON(mapped)
 
 function mapFilenameToPage(filenames) {
   return filenames.map(function readPage(filename) {
@@ -33,9 +34,9 @@ function generateRoutesConfig(filenamePageMap) {
   })
 }
 
-function writeRoutesConfigJSON(filenames) {
+function writeRoutesConfigJSON(mapped) {
   createDirIfNotExists(frameworkDir)
-  const adapted = adaptRoutesConfigToJSON(filenames)
+  const adapted = adaptRoutesConfigToJSON(mapped)
   fs.writeFileSync(
     path.join(frameworkDir, 'routes.config.json'),
     JSON.stringify(adapted)
@@ -47,10 +48,16 @@ function createDirIfNotExists(path) {
 }
 
 function adaptRoutesConfigToJSON(filenames) {
-  return filenames.map(function generateRouteConfigJSON(filename) {
+  return filenames.map(function generateRouteConfigJSON({
+    filename,
+    component,
+  }) {
+    const checkPrepopulate = existsAndIsFunction('prepopulate')
+
     return {
       path: applySlash(applyAliases(stripExt(filename))),
       componentPath: filename,
+      hasPrepopulate: checkPrepopulate(component),
     }
   })
 }
