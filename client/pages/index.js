@@ -7,7 +7,9 @@ function Index() {
       <F.Link prepopulate to='/users'>
         Users
       </F.Link>
-      <div>Index component</div>
+      <br />
+      <F.Link to='/posts'>Posts</F.Link>
+      <h1>Index</h1>
       <button onClick={() => alert('Yep')}>Does JS works?</button>
     </div>
   )

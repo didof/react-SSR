@@ -20,7 +20,9 @@ function Users() {
   return (
     <div>
       <Link to='/'>Home</Link>
-      <div>Users component</div>
+      <br />
+      <Link to='/posts'>Posts</Link>
+      <h1>Users component</h1>
       <ul>{users.map(toListItem)}</ul>
     </div>
   )
