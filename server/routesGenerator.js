@@ -2,8 +2,8 @@ import path from 'path'
 import fs from 'fs'
 import { existsAndIsFunction } from './helpers/check'
 
-const pagesDir = path.join(process.cwd(), 'src', 'client', 'pages')
-const frameworkDir = path.join(process.cwd(), 'src', '.framework')
+const pagesDir = path.join(process.cwd(), 'client', 'pages')
+const frameworkDir = path.join(process.cwd(), '.framework')
 
 // TODO compose
 const filenames = fs.readdirSync(pagesDir)
