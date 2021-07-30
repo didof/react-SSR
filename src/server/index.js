@@ -9,16 +9,13 @@ import { openBrowser } from './helpers/opener'
 import createStore from './helpers/createStore'
 import { matchPath } from '../client/Routes'
 import * as check from './helpers/check'
-
-import routesGenerator from './routesGenerator'
+import routesConfig from './routesGenerator'
 
 import 'babel-polyfill'
 
 const app = express()
 
 app.use(express.static('public'))
-
-const routes = routesGenerator()
 
 app.get('*', (req, res) => {
   const { path } = req
@@ -31,7 +28,8 @@ app.get('*', (req, res) => {
 
   Promise.all(prepopulatePromises).then(() => {
     const HTMLGenerator = createHTMLGenerator(store)
-    const reactAppGenerator = createReactAppGenerator(store)
+
+    const reactAppGenerator = createReactAppGenerator(store, routesConfig)
 
     const reactApp = reactAppGenerator(path)
 
@@ -47,7 +45,8 @@ function createPrepopulateCollector(store) {
   const checkPrepopulate = check.existsAndIsFunction('prepopulate')
 
   return function collectPrepopulatePromises({ route }) {
-    if (checkPrepopulate(route)) return route.prepopulate(store)
+    if (checkPrepopulate(route.component))
+      return route.component.prepopulate(store)
     return null
   }
 }

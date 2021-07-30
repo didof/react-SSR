@@ -1,24 +1,17 @@
 import path from 'path'
 import fs from 'fs'
-import { promisify } from 'util'
-
-const readdirPromise = promisify(fs.readdir)
-// const readFilePromise = promisify(fs.readFile)
 
 const pagesDir = path.join(process.cwd(), 'src', 'client', 'pages')
+const frameworkDir = path.join(process.cwd(), 'src', 'server', '.framework')
 
-function routesGenerator() {
-  collectFilenames(pagesDir).then(mapFilenameToPage).then(todo)
-}
+// TODO compose
+const filenames = fs.readdirSync(pagesDir)
+const mapped = mapFilenameToPage(filenames)
 
-export default routesGenerator
+const routesConfig = generateRoutesConfig(mapped)
+export default routesConfig
 
-function collectFilenames(path) {
-  return readdirPromise(path).catch(function unableToReadDir(err) {
-    console.error(`Unable to read pages directory at ${pagesDir}`)
-    throw new Error(err)
-  })
-}
+writeRoutesConfigJSON(filenames)
 
 function mapFilenameToPage(filenames) {
   return filenames.map(function readPage(filename) {
@@ -27,21 +20,60 @@ function mapFilenameToPage(filenames) {
   })
 }
 
-function todo(filenamePageMap) {
-  return filenamePageMap.map(function foo({ filename, component }) {
-    console.log(component)
-
+function generateRoutesConfig(filenamePageMap) {
+  return filenamePageMap.map(function genererateRouteConfig({
+    filename,
+    component,
+  }) {
     return {
-      path: filename,
+      path: applySlash(applyAliases(stripExt(filename))),
+      component,
+      exact: true,
+    }
+  })
+}
+
+function writeRoutesConfigJSON(filenames) {
+  createDirIfNotExists(frameworkDir)
+  const adapted = adaptRoutesConfigToJSON(filenames)
+  fs.writeFileSync(
+    path.join(frameworkDir, 'routes.config.json'),
+    JSON.stringify(adapted)
+  )
+}
+
+function createDirIfNotExists(path) {
+  if (!fs.existsSync(path)) fs.mkdirSync(path)
+}
+
+function adaptRoutesConfigToJSON(filenames) {
+  return filenames.map(function generateRouteConfigJSON(filename) {
+    return {
+      path: applySlash(applyAliases(stripExt(filename))),
+      componentPath: filename,
     }
   })
 }
 
 /**
- * {
-    prepopulate: () => {},
-    path: '/',
-    component: Index,
-    exact: true,
-  }
+ *  utils
  */
+
+function stripExt(filename) {
+  const splitted = filename.split('.')
+  splitted.pop()
+  return splitted.join('')
+}
+
+function applyAliases(input) {
+  switch (input) {
+    case 'index':
+      return ''
+    default:
+      return input
+  }
+}
+
+function applySlash(input) {
+  return '/' + input
+}

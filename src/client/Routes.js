@@ -4,7 +4,6 @@ import { renderRoutes, matchRoutes } from 'react-router-config'
 
 const routesConfig = [
   {
-    prepopulate: () => {},
     path: '/',
     component: Index,
     exact: true,
@@ -17,10 +16,10 @@ const routesConfig = [
   },
 ]
 
+export default routesConfig
+
 export const Routes = renderRoutes(routesConfig)
 
 export function matchPath(path) {
   return matchRoutes(routesConfig, path)
 }
-
-export default routesConfig
