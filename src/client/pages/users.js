@@ -2,10 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { fetchUsers } from '../actions'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
-function Users({ users, fetchUsers }) {
+function Users() {
+  const users = useSelector(state => state.users)
+  const dispatch = useDispatch()
+
   React.useEffect(() => {
-    fetchUsers()
+    dispatch(fetchUsers())
   }, [])
 
   function toListItem(user) {
@@ -25,8 +29,4 @@ Users.prepopulate = function UsersPrepopulate(store) {
   return store.dispatch(fetchUsers())
 }
 
-export default connect(mapStateToProps, { fetchUsers })(Users)
-
-function mapStateToProps({ users }) {
-  return { users }
-}
+export default Users

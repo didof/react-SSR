@@ -8,7 +8,7 @@ To start run:
 
 ### Server
 
-Anytime some user requests a page, the server calls the `loadData` static method of each page. Each returns the result of an action, thus data that ends up in the server-side redux store.
+Anytime some user requests a page, the server calls the `prepopulate` static method of each page. Each returns the result of an action, thus data that ends up in the server-side redux store.
 When this fetching process is completed, the server uses `renderToString` method to produce the "only-HTML" version of the React App. Since the store is populated, the relative UI chunks are renderer as well!
 The App is injected in an HTML file that will be sent to the client. This contains:
 

@@ -28,7 +28,7 @@ function mapFilenameToPage(filenames) {
 }
 
 function todo(filenamePageMap) {
-  return filenamePageMap.map(function stocazzo({ filename, component }) {
+  return filenamePageMap.map(function foo({ filename, component }) {
     console.log(component)
 
     return {
@@ -39,7 +39,7 @@ function todo(filenamePageMap) {
 
 /**
  * {
-    loadData: () => {},
+    prepopulate: () => {},
     path: '/',
     component: Index,
     exact: true,

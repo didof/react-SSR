@@ -4,13 +4,13 @@ import { renderRoutes, matchRoutes } from 'react-router-config'
 
 const routesConfig = [
   {
-    loadData: () => {},
+    prepopulate: () => {},
     path: '/',
     component: Index,
     exact: true,
   },
   {
-    loadData: Users.loadData,
+    prepopulate: Users.prepopulate,
     path: '/users',
     component: Users,
     exact: false,

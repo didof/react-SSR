@@ -18,7 +18,7 @@ const app = express()
 
 app.use(express.static('public'))
 
-// const routes = routesGenerator()
+const routes = routesGenerator()
 
 app.get('*', (req, res) => {
   const { path } = req
@@ -27,9 +27,9 @@ app.get('*', (req, res) => {
 
   const collectPrepopulate = createPrepopulateCollector(store)
 
-  const loadDataPromises = matchPath(path).map(collectPrepopulate)
+  const prepopulatePromises = matchPath(path).map(collectPrepopulate)
 
-  Promise.all(loadDataPromises).then(() => {
+  Promise.all(prepopulatePromises).then(() => {
     const HTMLGenerator = createHTMLGenerator(store)
     const reactAppGenerator = createReactAppGenerator(store)
 
