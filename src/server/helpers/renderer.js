@@ -12,7 +12,7 @@ export function createReactAppGenerator(store, routes) {
     return renderToString(
       <Provider store={store}>
         <StaticRouter location={path} context={context}>
-          <div>{renderRoutes(routes)}</div>
+          {renderRoutes(routes)}
         </StaticRouter>
       </Provider>
     )
