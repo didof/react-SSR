@@ -1,16 +1,24 @@
 {
     "users": [
       {
-        "id": 1,
+        "id": "u1",
         "name": "Didof"
       },
       {
-        "id": 2,
+        "id": "u2",
         "name": "Kelly"
       },
       {
-        "id": 3,
+        "id": "u3",
         "name": "Byte"
+      }
+    ],
+    "posts": [
+      {
+        "id": "p1",
+        "title": "Trying to build Next.js",
+        "content": "Lot of work!",
+        "authorId": "u1"
       }
     ]
   }

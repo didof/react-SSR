@@ -13,6 +13,10 @@ app.get('/users', (req, res) => {
   res.status(200).json(db.users)
 })
 
+app.get('/posts', (req, res) => {
+  res.status(200).json(db.posts)
+})
+
 const port = process.env.API_SERVER_PORT
 app.listen(port, () => {
   console.info(`API listening on http://localhost:${port}`)
