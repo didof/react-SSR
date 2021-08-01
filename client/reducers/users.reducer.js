@@ -2,7 +2,7 @@ import { FETCH_USERS } from '../actions'
 
 const initialState = []
 
-function userReducer(state = initialState, action) {
+function usersReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_USERS:
       return action.payload
@@ -11,4 +11,4 @@ function userReducer(state = initialState, action) {
   }
 }
 
-export default userReducer
+export default usersReducer

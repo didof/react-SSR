@@ -26,13 +26,21 @@ app.get('*', (req, res) => {
 
   const store = createStore()
 
-  const collectPrepopulate = makePrepopulateCollector(store)
+  const [collectInitStore, collectPrepopulate] = ['initStore', 'prepopulate']
+    .map(makeCollector)
+    .map(fn => fn(store))
+
+  const initStorePromises = routesConfig
+    .map(route => ({ route }))
+    .map(collectInitStore)
 
   const prepopulatePromises = matchRoutes(routesConfig, path).map(
     collectPrepopulate
   )
 
-  Promise.all(prepopulatePromises).then(() => {
+  const dataFetchingPromises = initStorePromises.concat(prepopulatePromises)
+
+  Promise.all(dataFetchingPromises).then(() => {
     const HTMLGenerator = createHTMLGenerator(store)
 
     const reactAppGenerator = createReactAppGenerator(store, routesConfig)
@@ -47,12 +55,14 @@ app.get('*', (req, res) => {
 
 app.listen(process.env.RENDERER_SERVER_PORT, openBrowser)
 
-function makePrepopulateCollector(store) {
-  const checkPrepopulate = check.existsAndIsFunction('prepopulate')
+function makeCollector(staticMethodName) {
+  return function receiveStore(store) {
+    const checkStaticMethod = check.existsAndIsFunction(staticMethodName)
 
-  return function collectPrepopulatePromise({ route }) {
-    if (checkPrepopulate(route.component))
-      return route.component.prepopulate(store)
-    return null
+    return function collectorPromise({ route }) {
+      if (checkStaticMethod(route.component))
+        return route.component[staticMethodName](store)
+      return null
+    }
   }
 }
