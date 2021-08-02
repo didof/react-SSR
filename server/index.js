@@ -25,10 +25,12 @@ app.get('*', (req, res) => {
   const { path } = req
 
   const store = createStore()
+  const makeCollector = initSharedCollectors(store)
 
-  const [collectInitStore, collectPrepopulate] = ['initStore', 'prepopulate']
-    .map(makeCollector)
-    .map(fn => fn(store))
+  const [collectInitStore, collectPrepopulate] = [
+    'initStore',
+    'prepopulate',
+  ].map(makeCollector)
 
   const initStorePromises = routesConfig
     .map(route => ({ route }))
@@ -55,14 +57,21 @@ app.get('*', (req, res) => {
 
 app.listen(process.env.RENDERER_SERVER_PORT, openBrowser)
 
-function makeCollector(staticMethodName) {
-  return function receiveStore(store) {
+function initSharedCollectors(store) {
+  const cached = {}
+
+  return function makeCollector(staticMethodName) {
     const checkStaticMethod = check.existsAndIsFunction(staticMethodName)
 
     return function collectorPromise({ route }) {
-      if (checkStaticMethod(route.component))
-        return route.component[staticMethodName](store)
-      return null
+      if (!checkStaticMethod(route.component)) return null
+      if (
+        cached.hasOwnProperty(route.path) &&
+        cached[route.path].hasOwnProperty('initStore')
+      )
+        return null
+      cached[route.path] = staticMethodName
+      return route.component[staticMethodName](store)
     }
   }
 }
