@@ -20,7 +20,7 @@ function Posts() {
       <h1>Posts</h1>
       {posts.map(({ title, content, authorId }) => {
         return (
-          <article>
+          <article key={authorId + title}>
             <h4>{title}</h4>
             <h6>by {authorId}</h6>
             <div>{content}</div>
