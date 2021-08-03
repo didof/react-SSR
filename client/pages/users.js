@@ -1,6 +1,5 @@
 import React from 'react'
 import { fetchUsers } from '../actions'
-import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Nav from '../components/nav'
 

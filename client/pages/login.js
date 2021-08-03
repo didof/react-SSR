@@ -1,9 +1,11 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import Nav from '../components/nav'
-import { api } from '../helpers/net'
 import { useHandleInput } from '../helpers/customHooks'
+import { login } from '../actions'
 
 function Login() {
+  const dispatch = useDispatch()
   const [username, handleUsername] = useHandleInput('didof')
   const [password, handlePassword] = useHandleInput('1234')
 
@@ -26,14 +28,12 @@ function Login() {
   async function handleSubmit(event) {
     event.preventDefault()
 
-    const data = {
-      username,
-      password,
-    }
-
-    const res = await api.post('/login', data)
-
-    alert(res.data.message)
+    dispatch(
+      login({
+        username,
+        password,
+      })
+    )
   }
 }
 

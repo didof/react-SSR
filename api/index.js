@@ -62,7 +62,7 @@ app.get('/logout', mw.auth, (req, res) => {
 })
 
 app.get('/protected', mw.auth, (req, res) => {
-  return res.status(200).send('you are authenticated')
+  return res.status(200).send('secret of ' + req.username)
 })
 
 const port = process.env.API_SERVER_PORT

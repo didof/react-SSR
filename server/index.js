@@ -10,11 +10,13 @@ import createStore from './helpers/createStore'
 import * as check from './helpers/check'
 import routesConfig from './routesGenerator'
 import { matchRoutes } from 'react-router-config'
+import proxy from 'express-http-proxy'
 
 import 'babel-polyfill'
 
 const app = express()
 
+app.use('/api', proxy(`http://localhost:${process.env.API_SERVER_PORT}`))
 app.use(express.static('public'))
 
 app.get('/favicon.ico', (req, res) => {
@@ -24,7 +26,9 @@ app.get('/favicon.ico', (req, res) => {
 app.get('*', (req, res) => {
   const { path } = req
 
-  const store = createStore()
+  const cookie = req.get('cookie')
+
+  const store = createStore(cookie)
   const makeCollector = initSharedCollectors(store)
 
   const [collectInitStore, collectPrepopulate] = [
