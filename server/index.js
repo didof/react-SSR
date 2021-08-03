@@ -14,6 +14,8 @@ import proxy from 'express-http-proxy'
 
 import 'babel-polyfill'
 
+const debug = {}
+
 const app = express()
 
 app.use('/api', proxy(`http://localhost:${process.env.API_SERVER_PORT}`))
@@ -36,17 +38,23 @@ app.get('*', (req, res) => {
     'prepopulate',
   ].map(makeCollector)
 
-  const initStorePromises = routesConfig
+  const initStoreApp = collectInitStore({ route: routesConfig[0] })
+
+  const pagesConfig = routesConfig[0].routes
+
+  const initStorePromises = pagesConfig
     .map(route => ({ route }))
     .map(collectInitStore)
 
-  const prepopulatePromises = matchRoutes(routesConfig, path).map(
+  const prepopulatePromises = matchRoutes(pagesConfig, path).map(
     collectPrepopulate
   )
 
-  const dataFetchingPromises = initStorePromises.concat(prepopulatePromises)
-
-  Promise.all(dataFetchingPromises).then(() => {
+  Promise.all([
+    initStoreApp,
+    ...initStorePromises,
+    ...prepopulatePromises,
+  ]).then(() => {
     const HTMLGenerator = createHTMLGenerator(store)
 
     const reactAppGenerator = createReactAppGenerator(store, routesConfig)
@@ -57,6 +65,8 @@ app.get('*', (req, res) => {
 
     res.status(200).send(html)
   })
+
+  console.log('debug', JSON.stringify(debug, null, 4))
 })
 
 app.listen(process.env.RENDERER_SERVER_PORT, openBrowser)
@@ -64,17 +74,19 @@ app.listen(process.env.RENDERER_SERVER_PORT, openBrowser)
 function initSharedCollectors(store) {
   const cached = {}
 
+  debug.cached = cached
+
   return function makeCollector(staticMethodName) {
     const checkStaticMethod = check.existsAndIsFunction(staticMethodName)
 
     return function collectorPromise({ route }) {
       if (!checkStaticMethod(route.component)) return null
       if (
-        cached.hasOwnProperty(route.path) &&
+        cached.hasOwnProperty('pathy') &&
         cached[route.path].hasOwnProperty('initStore')
       )
         return null
-      cached[route.path] = staticMethodName
+      cached[route.path || '_app'] = staticMethodName
       return route.component[staticMethodName](store)
     }
   }
