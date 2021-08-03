@@ -20,7 +20,6 @@ function Login() {
         },
       }
     )
-    console.log(res)
   }
 
   return (

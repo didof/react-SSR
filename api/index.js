@@ -13,7 +13,12 @@ import * as mw from './middlewares'
 
 const app = express()
 
-app.use(cors())
+app.use(
+  cors({
+    origin: 'http://localhost:8000',
+    credentials: true,
+  })
+)
 app.use(cookieParser())
 app.use(bodyParser())
 
