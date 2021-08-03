@@ -53,8 +53,12 @@ app.post('/login', (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
       })
-      .json({ message: 'access granted to ' + username })
+      .json({ id, username: name })
   })
+})
+
+app.get('/current-user', mw.auth, (req, res) => {
+  return res.status(200).json({ id: req.userId, username: req.username })
 })
 
 app.get('/logout', mw.auth, (req, res) => {
