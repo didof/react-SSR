@@ -1,6 +1,5 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import Nav from '../components/nav'
 import { useHandleInput } from '../helpers/customHooks'
 import { login } from '../actions'
 
@@ -11,7 +10,6 @@ function Login() {
 
   return (
     <div>
-      <Nav />
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <input type='text' value={username} onInput={handleUsername} />

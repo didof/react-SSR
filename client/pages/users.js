@@ -1,7 +1,6 @@
 import React from 'react'
 import { fetchUsers } from '../actions'
 import { useDispatch, useSelector } from 'react-redux'
-import Nav from '../components/nav'
 
 function Users() {
   const users = useSelector(state => state.users)
@@ -18,7 +17,6 @@ function Users() {
 
   return (
     <div>
-      <Nav />
       <h1>Users component</h1>
       <ul>{users.map(toListItem)}</ul>
     </div>

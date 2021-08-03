@@ -1,7 +1,6 @@
 import React from 'react'
 import { fetchPosts } from '../actions'
 import { useSelector, useDispatch } from 'react-redux'
-import Nav from '../components/nav'
 
 function Posts() {
   const posts = useSelector(state => state.posts)
@@ -14,7 +13,6 @@ function Posts() {
 
   return (
     <div>
-      <Nav />
       <h1>Posts</h1>
       {posts.map(({ title, content, authorId }) => {
         return (

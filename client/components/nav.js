@@ -4,7 +4,13 @@ import F from './framework'
 
 function Nav() {
   return (
-    <ul>
+    <ul
+      style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+        listStyle: 'none',
+      }}
+    >
       <li>
         <F.Link to='/'>Home</F.Link>
       </li>
