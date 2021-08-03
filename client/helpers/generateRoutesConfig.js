@@ -1,6 +1,7 @@
 import routesConfig from '../../.framework/routes.config.json'
 import { renderRoutes } from 'react-router-config'
 import App from '../_app'
+import NotFound from '../_notFound'
 
 function restoreConfigFromJSON() {
   return routesConfig.map(({ path, componentPath }) => {
@@ -15,6 +16,10 @@ function restoreConfigFromJSON() {
 
 export default function Routes() {
   const routes = restoreConfigFromJSON()
+
+  routes.push({
+    component: NotFound,
+  })
 
   const wrapped = [
     {

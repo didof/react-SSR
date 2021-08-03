@@ -55,15 +55,21 @@ app.get('*', (req, res) => {
     ...initStorePromises,
     ...prepopulatePromises,
   ]).then(() => {
+    const context = {}
+
     const HTMLGenerator = createHTMLGenerator(store)
 
-    const reactAppGenerator = createReactAppGenerator(store, routesConfig)
+    const reactAppGenerator = createReactAppGenerator(
+      store,
+      routesConfig,
+      context
+    )
 
     const reactApp = reactAppGenerator(path)
 
     const html = HTMLGenerator(reactApp)
 
-    res.status(200).send(html)
+    res.status(context.status || 200).send(html)
   })
 
   console.log('debug', JSON.stringify(debug, null, 4))

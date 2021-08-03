@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import { existsAndIsFunction } from './helpers/check'
 import App from '../client/_app'
+import NotFound from '../client/_notFound'
 
 const pagesDir = path.join(process.cwd(), 'client', 'pages')
 const frameworkDir = path.join(process.cwd(), '.framework')
@@ -32,6 +33,10 @@ function generateRoutesConfig(filenamePageMap) {
       component,
       exact: true,
     }
+  })
+
+  pagesRoutes.push({
+    component: NotFound,
   })
 
   return [
