@@ -1,7 +1,8 @@
 import routesConfig from '../../.framework/routes.config.json'
 import { renderRoutes } from 'react-router-config'
+import App from '../_app'
 
-function generateRoutesConfig() {
+function restoreConfigFromJSON() {
   return routesConfig.map(({ path, componentPath }) => {
     const component = require('../pages/' + componentPath).default
     return {
@@ -13,5 +14,14 @@ function generateRoutesConfig() {
 }
 
 export default function Routes() {
-  return renderRoutes(generateRoutesConfig())
+  const routes = restoreConfigFromJSON()
+
+  const wrapped = [
+    {
+      component: App,
+      routes,
+    },
+  ]
+
+  return renderRoutes(wrapped)
 }

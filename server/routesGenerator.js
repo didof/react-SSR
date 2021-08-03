@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { existsAndIsFunction } from './helpers/check'
+import App from '../client/_app'
 
 const pagesDir = path.join(process.cwd(), 'client', 'pages')
 const frameworkDir = path.join(process.cwd(), '.framework')
@@ -22,7 +23,7 @@ function mapFilenameToPage(filenames) {
 }
 
 function generateRoutesConfig(filenamePageMap) {
-  return filenamePageMap.map(function genererateRouteConfig({
+  const pagesRoutes = filenamePageMap.map(function genererateRouteConfig({
     filename,
     component,
   }) {
@@ -32,11 +33,19 @@ function generateRoutesConfig(filenamePageMap) {
       exact: true,
     }
   })
+
+  return [
+    {
+      component: App,
+      routes: pagesRoutes,
+    },
+  ]
 }
 
 function writeRoutesConfigJSON(mapped) {
   createDirIfNotExists(frameworkDir)
   const adapted = adaptRoutesConfigToJSON(mapped)
+
   fs.writeFileSync(
     path.join(frameworkDir, 'routes.config.json'),
     JSON.stringify(adapted)

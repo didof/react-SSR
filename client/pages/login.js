@@ -18,8 +18,6 @@ function Login() {
         <br />
         <input type='password' value={password} onInput={handlePassword} />
         <br />
-        <span>Sign in as didof and password 1234</span>
-        <br />
         <button>Sign in</button>
       </form>
     </div>
