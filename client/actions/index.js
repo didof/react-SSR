@@ -1,8 +1,8 @@
 export const FETCH_USERS = 'fetch_users'
 export const FETCH_POSTS = 'fetch_posts'
 export const FETCH_CURRENT_USER = 'fetch_current_user'
-export const RESET_CURRENT_USER = 'reset_current_user'
 export const LOGIN = 'login'
+export const LOGOUT = 'logout'
 
 export const fetchUsers = () => async (dispatch, getState, api) => {
   const res = await api.get('/users')
@@ -31,6 +31,12 @@ export const login = data => async (dispatch, getState, api) => {
   })
 }
 
+export const logout = () => async (dispatch, getState, api) => {
+  await api.get('/logout')
+
+  dispatch({ type: LOGOUT })
+}
+
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
   let res
   try {
@@ -41,6 +47,6 @@ export const fetchCurrentUser = () => async (dispatch, getState, api) => {
       payload: res.data,
     })
   } catch (err) {
-    dispatch({ type: RESET_CURRENT_USER })
+    dispatch({ type: LOGOUT })
   }
 }

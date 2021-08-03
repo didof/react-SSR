@@ -1,13 +1,16 @@
-import { FETCH_CURRENT_USER, RESET_CURRENT_USER, LOGIN } from '../actions'
+import { FETCH_CURRENT_USER, LOGIN, LOGOUT } from '../actions'
 
-const initialState = {}
+const initialState = {
+  id: null,
+  username: 'guest',
+}
 
 function authReducer(state = initialState, action) {
   switch (action.type) {
     case LOGIN:
     case FETCH_CURRENT_USER:
       return action.payload
-    case RESET_CURRENT_USER:
+    case LOGOUT:
       return initialState
     default:
       return state
