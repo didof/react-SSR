@@ -1,29 +1,40 @@
 import React from 'react'
-import axios from 'axios'
 import Nav from '../components/nav'
 import { api } from '../helpers/net'
+import { useHandleInput } from '../helpers/customHooks'
 
 function Login() {
+  const [username, handleUsername] = useHandleInput('didof')
+  const [password, handlePassword] = useHandleInput('1234')
+
+  return (
+    <div>
+      <Nav />
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <input type='text' value={username} onInput={handleUsername} />
+        <br />
+        <input type='password' value={password} onInput={handlePassword} />
+        <br />
+        <span>Sign in as didof and password 1234</span>
+        <br />
+        <button>Sign in</button>
+      </form>
+    </div>
+  )
+
   async function handleSubmit(event) {
     event.preventDefault()
 
     const data = {
-      username: 'didof',
-      password: '1234',
+      username,
+      password,
     }
 
     const res = await api.post('/login', data)
-  }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <Nav />
-      <h1>Login</h1>
-      <span>Sign in as didof and password 1234</span>
-      <br />
-      <button>Sign in</button>
-    </form>
-  )
+    alert(res.data.message)
+  }
 }
 
 export default Login
