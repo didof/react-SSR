@@ -1,25 +1,18 @@
 import React from 'react'
 import axios from 'axios'
 import Nav from '../components/nav'
+import { api } from '../helpers/net'
 
 function Login() {
   async function handleSubmit(event) {
     event.preventDefault()
 
-    const res = await axios.post(
-      'http://localhost:8001/login',
-      {
-        username: 'didof',
-        password: '1234',
-      },
-      {
-        withCredentials: true,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    const data = {
+      username: 'didof',
+      password: '1234',
+    }
+
+    const res = await api.post('/login', data)
   }
 
   return (

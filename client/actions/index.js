@@ -1,13 +1,10 @@
-import axios from 'axios'
-
-const API_URL = 'http://localhost:8001'
+import { api } from '../helpers/net'
 
 export const FETCH_USERS = 'fetch_users'
 export const FETCH_POSTS = 'fetch_posts'
 
 export const fetchUsers = () => async dispatch => {
-  // TODO inject at build time the API port via definePlugin
-  const res = await axios.get(API_URL + '/users')
+  const res = await api.get('/users')
 
   dispatch({
     type: FETCH_USERS,
@@ -16,7 +13,7 @@ export const fetchUsers = () => async dispatch => {
 }
 
 export const fetchPosts = () => async dispatch => {
-  const res = await axios.get(API_URL + '/posts')
+  const res = await api.get('/posts')
 
   dispatch({
     type: FETCH_POSTS,
