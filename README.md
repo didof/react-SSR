@@ -35,9 +35,3 @@ A further express server mocks up a database an the relative API. The redux acti
 - _Prepopulation_: A `<Link >` component accepts a boolean prop named `prepopulate`. If the Renderer Server meets it during the `renderToString` phase, it will call the `prepopulate` static method associated to the component relative to that route. Thus, the redux store will be already filled up and, in case the user visit that route, the client won't need to wait for the fetching since it already happened server-side.
 
 - _fs API_: The route configuration is created on the server. It reads the content of the _pages_ dir and creates a `.json` file that will be used by the client to sync to the server-renderer html.
-
-## Todo
-
-- Update _redux_ to the modern version
-
-- serverBoot - Promise.all of all prepopulate static method and put in the store
