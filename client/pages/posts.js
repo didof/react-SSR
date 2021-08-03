@@ -1,7 +1,7 @@
 import React from 'react'
-import F from '../components/framework'
 import { fetchPosts } from '../actions'
 import { useSelector, useDispatch } from 'react-redux'
+import Nav from '../components/nav'
 
 function Posts() {
   const posts = useSelector(state => state.posts)
@@ -14,9 +14,7 @@ function Posts() {
 
   return (
     <div>
-      <F.Link to='/'>Home</F.Link>
-      <br />
-      <F.Link to='/users'>Users</F.Link>
+      <Nav />
       <h1>Posts</h1>
       {posts.map(({ title, content, authorId }) => {
         return (

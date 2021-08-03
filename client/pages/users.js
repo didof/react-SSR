@@ -1,8 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { fetchUsers } from '../actions'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import Nav from '../components/nav'
 
 function Users() {
   const users = useSelector(state => state.users)
@@ -19,9 +19,7 @@ function Users() {
 
   return (
     <div>
-      <Link to='/'>Home</Link>
-      <br />
-      <Link to='/posts'>Posts</Link>
+      <Nav />
       <h1>Users component</h1>
       <ul>{users.map(toListItem)}</ul>
     </div>

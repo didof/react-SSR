@@ -1,14 +1,10 @@
 import React from 'react'
-import F from '../components/framework'
+import Nav from '../components/nav'
 
 function Index() {
   return (
     <div>
-      <F.Link prepopulate to='/users'>
-        Users
-      </F.Link>
-      <br />
-      <F.Link to='/posts'>Posts</F.Link>
+      <Nav />
       <h1>Index</h1>
       <button onClick={() => alert('Yep')}>Does JS works?</button>
     </div>

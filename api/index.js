@@ -48,7 +48,7 @@ app.post('/login', (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
       })
-      .send('access granted to ' + username)
+      .json({ message: 'access granted to ' + username })
   })
 })
 
