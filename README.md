@@ -16,16 +16,44 @@ Just install the dependencies, then issue the command:
 ## Features overview
 
 - Routing
-  - Server
-  - Client
-  - Routes generation (fs page API)
+  - Routes generation - fs page API
     - \_app
     - \_notFound
-- page's static methods
+- Redux store
+- Page's static methods
   - prepopulate
     - `<F.Link>`'s attribute
   - initStore
+- Authentication
 - API & server proxy
+
+---
+
+### Routing
+
+The same _React App_ is used for rendering on the server and for hydration on the client. However, they have a difference. `StaticRouter` is used on the server, and` BrowserRouter` on the browser. On the server the path given to the `StaticRouter` is the one extracted from the` req`.
+
+The user types `http://localhost:8000/login`, then `/login` is passed as prop `location` to the `StaticRouter`; the latter extrapolates from the routes configuration (`routesConfig`) provided and renders the appropriate page.
+
+Once the app has been hydrated on the client, the `BrowserRouter` takes over and uses the same configuration as routes.
+
+#### Routes generation - fs page API
+
+Trying to emulate what Next.js and Nuxt.js do, I built a small script that collects all the components in the `pages` folder and works them to produce the aforementioned `routesCongif`.
+
+> The configuration is translated into a JSON mask which is used by the client to reconstruct the same configuration and provide it to the `BrowserRouter`
+
+##### \_app
+
+The `App` component (`_app.js`) wraps all the other routes. In this way it is always rendered, so that it does not affect the functionality of the other pages in any way.
+It can be used to create shared layouts between pages, execute business logic or calls. In the example it uses a static method called only on the server (see `initStore` later) to find the current user.
+
+##### \_notFound
+
+The `NotFound` component (`_notFound.js`) is added as the last route to the `routeConfig`. Not having an associated path, it is renderer for all unknown paths.
+
+It receives the `staticContext` prop which corresponds to the `context` provided and managed by the `StaticRouter`. On this object it adds a `status` property with a value of `404`. In this way, when the server has finished rendering the html, before sending it to the client, it can modulate the status code of the request appropriately.
+In this way the client still receives html server side rendered which is hydrated to a _React app_, all with the appropriate `404` status code.
 
 ---
 
