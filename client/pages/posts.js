@@ -27,6 +27,8 @@ function Posts() {
   )
 }
 
-Posts.initStore = fetchPosts
+Posts.initStore = function PostsInitStore(store) {
+  return store.dispatch(fetchPosts())
+}
 
 export default Posts

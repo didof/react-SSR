@@ -58,15 +58,17 @@ app.get('*', (req, res) => {
     ...initStorePromises,
     ...prepopulatePromises,
   ]).then(() => {
-    const context = {}
-
     const HTMLGenerator = createHTMLGenerator(store)
 
     const reactApp = reactAppGenerator(store, path)
 
     const html = HTMLGenerator(reactApp)
 
-    res.status(context.status || 200).send(html)
+    if (context.status) res.status(context.status)
+    if (context.action === 'REPLACE') res.status(301)
+    else res.status(200)
+
+    res.send(html)
   })
 
   console.log('debug', JSON.stringify(debug, null, 4))
@@ -91,9 +93,7 @@ function initSharedCollectors(store) {
         return null
       cached[route.path || '_app'] = staticMethodName
 
-      const method = route.component[staticMethodName]
-
-      const promise = method.action ? store.dispatch(method()) : method(store)
+      const promise = route.component[staticMethodName](store)
 
       return new Promise(resolve => {
         promise.then(resolve).catch(resolve)

@@ -67,8 +67,12 @@ app.get('/logout', mw.authGuard, (req, res) => {
   return res.clearCookie('access_token').status(200).send('logged out')
 })
 
-app.get('/protected', mw.authGuard, (req, res) => {
-  return res.status(200).send('secret of ' + req.username)
+app.get('/secret', mw.authGuard, (req, res) => {
+  return res.status(200).json({
+    url:
+      'https://pixnio.com/free-images/2021/01/06/2021-01-06-11-54-43-1800x1200.jpg',
+    caption: 'The Cake is a Lie!',
+  })
 })
 
 const port = process.env.API_SERVER_PORT
