@@ -34,7 +34,7 @@ app.get('*', (req, res) => {
   const cookie = req.get('cookie')
 
   const store = createStore(cookie)
-  const makeCollector = initSharedCollectors(store)
+  const makeCollector = initCollectors(store)
 
   const [collectInitStore, collectPrepopulate] = [
     'initStore',
@@ -76,7 +76,7 @@ app.get('*', (req, res) => {
 
 app.listen(process.env.RENDERER_SERVER_PORT, openBrowser)
 
-function initSharedCollectors(store) {
+function initCollectors(store) {
   const cached = {}
 
   debug.cached = cached

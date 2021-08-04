@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { fetchPosts } from '../actions'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -13,6 +14,10 @@ function Posts() {
 
   return (
     <div>
+      <Helmet>
+        <title>Posts List</title>
+        <meta property='og:title' content='Posts List' />
+      </Helmet>
       <h1>Posts</h1>
       {posts.map(({ title, content, authorId }) => {
         return (

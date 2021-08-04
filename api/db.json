@@ -8,12 +8,12 @@
       {
         "id": "u2",
         "password": "$2b$10$xOgGBAkm2RKGGh43ij1Or.UJv9xU5VXyleEA9aWu8UR9SxiWbQpxC",
-        "name": "Kelly"
+        "name": "kelly"
       },
       {
         "id": "u3",
         "password": "$2b$10$xOgGBAkm2RKGGh43ij1Or.UJv9xU5VXyleEA9aWu8UR9SxiWbQpxC",
-        "name": "Byte"
+        "name": "byte"
       }
     ],
     "posts": [

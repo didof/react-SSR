@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import { useHandleInput } from '../helpers/customHooks'
 import { useAuth } from '../helpers/customHooks'
 
@@ -7,16 +8,13 @@ function Login() {
   const [username, handleUsername] = useHandleInput('didof')
   const [password, handlePassword] = useHandleInput('1234')
 
-  if (isAuth)
-    return (
-      <div>
-        <span>You are already logged in as {authInfo.username}</span>
-        <br />
-        <button onClick={authHandler}>Logout</button>
-      </div>
-    )
-
-  return (
+  const pageContent = isAuth ? (
+    <div>
+      <span>You are already logged in as {authInfo.username}</span>
+      <br />
+      <button onClick={authHandler}>Logout</button>
+    </div>
+  ) : (
     <div>
       <h1>Login</h1>
 
@@ -27,6 +25,16 @@ function Login() {
         <br />
         <button>Sign in</button>
       </form>
+    </div>
+  )
+
+  return (
+    <div>
+      <Helmet>
+        <title>Login</title>
+        <meta property='og:title' content='Login Page' />
+      </Helmet>
+      {pageContent}
     </div>
   )
 
