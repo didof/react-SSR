@@ -12,6 +12,7 @@ export const fetchUsers = () => async (dispatch, getState, api) => {
     payload: res.data,
   })
 }
+fetchUsers.action = true
 
 export const fetchPosts = () => async (dispatch, getState, api) => {
   const res = await api.get('/posts')
@@ -21,7 +22,6 @@ export const fetchPosts = () => async (dispatch, getState, api) => {
     payload: res.data,
   })
 }
-
 fetchPosts.action = true
 
 export const login = data => async (dispatch, getState, api) => {
@@ -32,12 +32,14 @@ export const login = data => async (dispatch, getState, api) => {
     payload: res.data,
   })
 }
+login.action = true
 
 export const logout = () => async (dispatch, getState, api) => {
   await api.get('/logout')
 
   dispatch({ type: LOGOUT })
 }
+logout.action = true
 
 export const fetchCurrentUser = () => async (dispatch, getState, api) => {
   let res
@@ -52,3 +54,4 @@ export const fetchCurrentUser = () => async (dispatch, getState, api) => {
     dispatch({ type: LOGOUT })
   }
 }
+fetchCurrentUser.action = true
