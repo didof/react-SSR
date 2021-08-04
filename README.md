@@ -49,8 +49,5 @@ The _Link_ component under the _F_ namespace extends the homonym offered by the 
 
 #### initStore
 
-Nel funzionamento è identico al precedente. Tuttavia se su di una pagina sono presenti sia _prepopulate_ che _initStore_, è data precedenza al secondo ignorando di conseguenza il primo.
-Sostanzialmente permette di informare il server di fetchare quel data di cui proprio non si può fare a meno, oppure talmente pesante che sia preferibile non affidarne il recupero al client.
-
 It is identical to the previous one. However, if both _prepopulate_ and _initStore_ are present on a page, precedence is given to the latter, thus ignoring the former.
 Basically it allows you to inform the server to fetch that data which you just cannot do without, or so heavy that it is preferable not to entrust the recovery to the client.
