@@ -1,37 +1,56 @@
 # React SSR
 
-To start run:
+## Premise
+
+I wanted to try to understand what is behind Next.js and, by extension to Vue.js, to Nuxt.js. Server side rendering is a wonderful process that allows you to mitigate some problems related to the world of SPAs, such as TTFP or SEO.
+This PoC is in no way to be considered as a substitute for the aforementioned frameworks. Rather, it can show those interested how I assembled the various pieces.
+
+## Try the Demo
+
+Just install the dependencies, then issue the command:
+
+`npm install`
 
 `npm run dev`
 
-## State of the art
+## Features overview
 
-### Server
+- Routing
+  - Server
+  - Client
+  - Routes generation (fs page API)
+    - \_app
+    - \_notFound
+- page's static methods
+  - prepopulate
+    - `<F.Link>`'s attribute
+  - initStore
+- API & server proxy
 
-Anytime some user requests a page, the server calls the `prepopulate` static method of each page. Each returns the result of an action, thus data that ends up in the server-side redux store.
-When this fetching process is completed, the server uses `renderToString` method to produce the "only-HTML" version of the React App. Since the store is populated, the relative UI chunks are renderer as well!
-The App is injected in an HTML file that will be sent to the client. This contains:
+---
 
-- The App inside a `div#__root`
-- A `script` that requests the bundled client-side version of the app from `/public`
-- The redux initialState appended to the window object as `window.__INITIAL__STATE__`. It is serialized to mitigate XSS attacks.
+### Page's static methods
 
-Still on the server, `StaticRouter` receives the requested `path` (taken from `req`) and decides which page to render in the `renderToString` moment.
-On the browser the good ol' `BrowserRouter` is in charge of the routing in a SPA fashion.
+I have allowed to associate two static methods to the component-pages. They are similar but treated differently. In both cases they are collected and performed on the server before the app is renderer. They have the purpose of retrieving the information necessary for rendering in the generated html.
+These are functions that receive the _redux_ `store` and must return the `dispatch` of an _action_. Their execution leads to the population of the `store`.
 
-### Client
+> To prevent the server from breaking or hanging when one of these promises is unresolved or rejected, they are all wrapped in a Promise that resolves in both cases.
 
-It's a standard React App but with few noteworthy exceptions.
+#### prepopulate
 
-- Instead of `ReactDOM.render` it's used `ReactDOM.hydrate` on the `div#__root`; the App already exists in the DOM, it just need to be injected with a soul.
-- The creation of the Redux store uses the `window.__INITIAL__DATA__` as initialData. Otherwise the client-side React would argue that the hydrated App is different from what it should be.
+The `prepopulate` static method is only executed when the user requests the associated page directly from the server. In the example, only the _users_ page at the `/users` route has this method. The relative action, therefore the relative _http call_ will occur on the server only when the user navigates directly to `localhost:8000/users`.
+Getting to `/users` via client routing will in no way trigger that method. Therefore it is necessary to take this possibility into account and execute the call in a "classic" way in _useEffect_ (a simple but effective optimization is to execute it only when information has not already been collected on the server, or when it has become obsolete).
 
-### API
+##### `F.Link`'s attribute
 
-A further express server mocks up a database an the relative API. The redux actions take here the data.
+The _Link_ component under the _F_ namespace extends the homonym offered by the `react-router-dom` library. If provided with the `prepopulate` boolean prop, the server will retrieve the component associated with the link path (under the `to` prop) and, if present, will extrapolate the `prepopulate` method. Then it will call it and the data will be saved in the store in advance. In this way, if and when the user visit that page, it won't have to wait for the fetching since it already happened.
 
-### Features
+> This feature is only worth using for pages that will most likely be visited
 
-- _Prepopulation_: A `<Link >` component accepts a boolean prop named `prepopulate`. If the Renderer Server meets it during the `renderToString` phase, it will call the `prepopulate` static method associated to the component relative to that route. Thus, the redux store will be already filled up and, in case the user visit that route, the client won't need to wait for the fetching since it already happened server-side.
+#### initStore
 
-- _fs API_: The route configuration is created on the server. It reads the content of the _pages_ dir and creates a `.json` file that will be used by the client to sync to the server-renderer html.
+Nel funzionamento è identico al precedente. Tuttavia se su di una pagina sono presenti sia _prepopulate_ che _initStore_, è data precedenza al secondo ignorando di conseguenza il primo.
+Sostanzialmente permette di informare il server di fetchare quel data di cui proprio non si può fare a meno, oppure talmente pesante che sia preferibile non affidarne il recupero al client.
+
+It is identical to the previous one. However, if both _prepopulate_ and _initStore_ are present on a page, precedence is given to the latter, thus ignoring the former.
+Basically it allows you to inform the server to fetch that data which you just cannot do without, or so heavy that it is preferable not to entrust the recovery to the client.

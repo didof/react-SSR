@@ -87,8 +87,8 @@ function initCollectors(store) {
     return function collectorPromise({ route }) {
       if (!checkStaticMethod(route.component)) return null
       if (
-        cached.hasOwnProperty('pathy') &&
-        cached[route.path].hasOwnProperty('initStore')
+        cached.hasOwnProperty(route.path) &&
+        cached[route.path] == 'initStore'
       )
         return null
       cached[route.path || '_app'] = staticMethodName
