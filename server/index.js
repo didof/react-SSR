@@ -93,9 +93,11 @@ function initSharedCollectors(store) {
 
       const method = route.component[staticMethodName]
 
-      if (method.action) return store.dispatch(method())
+      const promise = method.action ? store.dispatch(method()) : method(store)
 
-      return method(store)
+      return new Promise(resolve => {
+        promise.then(resolve).catch(resolve)
+      })
     }
   }
 }

@@ -1,17 +1,9 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { logout } from '../actions'
-
+import { useAuth } from '../helpers/customHooks'
 import F from './framework'
 
 function Nav() {
-  const auth = useSelector(state => state.auth)
-  const dispatch = useDispatch()
-
-  async function handleLogout() {
-    dispatch(logout())
-  }
-
+  const { isAuth, authHandler } = useAuth()
   return (
     <ul
       style={{
@@ -31,8 +23,10 @@ function Nav() {
           Users
         </F.Link>
       </li>
-      {auth.id ? (
-        <u onClick={handleLogout}>Logout</u>
+      {isAuth ? (
+        <u onClick={authHandler} style={{ cursor: 'pointer' }}>
+          Logout
+        </u>
       ) : (
         <F.Link to='/login'>Login</F.Link>
       )}
