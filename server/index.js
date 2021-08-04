@@ -25,6 +25,9 @@ app.get('/favicon.ico', (req, res) => {
   res.status(200).send()
 })
 
+const context = {}
+const reactAppGenerator = createReactAppGenerator(routesConfig, context)
+
 app.get('*', (req, res) => {
   const { path } = req
 
@@ -59,13 +62,7 @@ app.get('*', (req, res) => {
 
     const HTMLGenerator = createHTMLGenerator(store)
 
-    const reactAppGenerator = createReactAppGenerator(
-      store,
-      routesConfig,
-      context
-    )
-
-    const reactApp = reactAppGenerator(path)
+    const reactApp = reactAppGenerator(store, path)
 
     const html = HTMLGenerator(reactApp)
 
@@ -93,7 +90,12 @@ function initSharedCollectors(store) {
       )
         return null
       cached[route.path || '_app'] = staticMethodName
-      return route.component[staticMethodName](store)
+
+      const method = route.component[staticMethodName]
+
+      if (method.action) return store.dispatch(method())
+
+      return method(store)
     }
   }
 }

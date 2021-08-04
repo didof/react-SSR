@@ -22,6 +22,8 @@ export const fetchPosts = () => async (dispatch, getState, api) => {
   })
 }
 
+fetchPosts.action = true
+
 export const login = data => async (dispatch, getState, api) => {
   const res = await api.post('/login', data)
 

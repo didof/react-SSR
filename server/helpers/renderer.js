@@ -5,8 +5,8 @@ import { StaticRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import serialize from 'serialize-javascript'
 
-export function createReactAppGenerator(store, routes, context) {
-  return function generateApp(path) {
+export function createReactAppGenerator(routes, context) {
+  return function generateApp(store, path) {
     return renderToString(
       <Provider store={store}>
         <StaticRouter location={path} context={context}>
