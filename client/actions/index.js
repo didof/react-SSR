@@ -27,6 +27,8 @@ fetchPosts.action = true
 export const login = data => async (dispatch, getState, api) => {
   const res = await api.post('/login', data)
 
+  dispatch(fetchPosts())
+
   dispatch({
     type: LOGIN,
     payload: res.data,
@@ -36,6 +38,8 @@ login.action = true
 
 export const logout = () => async (dispatch, getState, api) => {
   await api.get('/logout')
+
+  dispatch(fetchPosts())
 
   dispatch({ type: LOGOUT })
 }

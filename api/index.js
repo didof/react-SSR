@@ -28,8 +28,10 @@ app.get('/users', (req, res) => {
   res.status(200).json(usersStrippedOfPasswords)
 })
 
-app.get('/posts', (req, res) => {
-  res.status(200).json(db.posts)
+app.get('/posts', mw.authInfo, (req, res) => {
+  if (req.userId) return res.status(200).json(db.posts)
+  const notDraftPosts = db.posts.filter(post => !post.draft)
+  res.status(200).json(notDraftPosts)
 })
 
 app.post('/login', (req, res) => {
@@ -57,15 +59,15 @@ app.post('/login', (req, res) => {
   })
 })
 
-app.get('/current-user', mw.auth, (req, res) => {
+app.get('/current-user', mw.authGuard, (req, res) => {
   return res.status(200).json({ id: req.userId, username: req.username })
 })
 
-app.get('/logout', mw.auth, (req, res) => {
+app.get('/logout', mw.authGuard, (req, res) => {
   return res.clearCookie('access_token').status(200).send('logged out')
 })
 
-app.get('/protected', mw.auth, (req, res) => {
+app.get('/protected', mw.authGuard, (req, res) => {
   return res.status(200).send('secret of ' + req.username)
 })
 

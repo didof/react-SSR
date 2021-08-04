@@ -21,7 +21,15 @@
         "id": "p1",
         "title": "Trying to build Next.js",
         "content": "Lot of work!",
-        "authorId": "u1"
+        "authorId": "u1",
+        "draft": false
+      },
+      {
+        "id": "p2",
+        "title": "Merging Micro-FrontEnd in SSR",
+        "content": "I don't have the slightest idea",
+        "authorId": "u1",
+        "draft": true
       }
     ]
   }
