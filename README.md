@@ -94,15 +94,6 @@ Basically it allows you to inform the server to fetch that data which you just c
 
 ### Authentication
 
-Nel contesto del SSR il modo più semplice per gestire l'autenticazione è quello basato sui **cookie**.
-
-Trovo più semplice comprenderne il significato di tale asserzione immaginando di aver implementato un sistema di autenticazione dove un _json-web-token_ è inserito nell'header **Authentication**.
-Supponiamo che l'utente voglia accedere _direttamente_ alla pagina `/secret`. Questa route richiede che l'utente sia autenticato. Essendo questa la prima richiesta fatta dall'utente al server, non è ancora stato eseguito nessuno script, quindi non è stato possibile reperire e aggiungere il _jwt_ alla richiesta. Il risultato è che l'utente che visita direttamente una route protetta verrebbe sempre rimbalzato al login.
-
-Diversamente, delegando il _jwt_ nel **cookie**, essendo esso associato al dominio del sito, verrà incluso anche nella prima richiesta. In questo modo il server può estrapolarlo, associarlo a tutte le richieste che verranno fatte verso l'API e dunque risultare autenticato.
-
-Nel caso della mia implementazione, l'eventuale cookie è passato alla funzione in carica di generare lo store di redux. Qui viene stabilita una _axiosInstance_ dove, oltre a specificare il _baseURL_, vengono settati gli headers tra cui il cookie. Questa _axiosInstance_ è passata come estensore del _thunk-middleware_, diventanto dunque reperibile nelle actions.
-
 In the context of the **SSR**, the simplest way to manage authentication is based on **cookies**.
 
 I find it easier to understand the meaning of this statement by imagining what happens with an implementation that provides a _json-web-token_ provided under the _Authentication_ header.
