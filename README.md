@@ -31,9 +31,9 @@ Just install the dependencies, then issue the command:
 
 ### Routing
 
-The same _React App_ is used for rendering on the server and for hydration on the client. However, they have a difference. `StaticRouter` is used on the server, and` BrowserRouter` on the browser. On the server the path given to the `StaticRouter` is the one extracted from the` req`.
+The same _React App_ is used for rendering on the server and for hydration on the client. However, they have a difference. In the context of routing, `StaticRouter` is used on the server, and` BrowserRouter` on the browser. On the server the path given to the `StaticRouter` is the one extracted from the` req`.
 
-The user types `http://localhost:8000/login`, then `/login` is passed as prop `location` to the `StaticRouter`; the latter extrapolates from the routes configuration (`routesConfig`) provided and renders the appropriate page.
+The user types `http://localhost:8000/login`, thus `/login` is passed as prop `location` to the `StaticRouter`; it matches it to the routes configuration (`routesConfig`) and renders the appropriate page.
 
 Once the app has been hydrated on the client, the `BrowserRouter` takes over and uses the same configuration as routes.
 
@@ -54,6 +54,16 @@ The `NotFound` component (`_notFound.js`) is added as the last route to the `rou
 
 It receives the `staticContext` prop which corresponds to the `context` provided and managed by the `StaticRouter`. On this object it adds a `status` property with a value of `404`. In this way, when the server has finished rendering the html, before sending it to the client, it can modulate the status code of the request appropriately.
 In this way the client still receives html server side rendered which is hydrated to a _React app_, all with the appropriate `404` status code.
+
+---
+
+### Redux Store
+
+The redux store is created on the server. This way you can populate it before it even reaches the client. However, since at the time of hydration it will be necessary to recreate the redux store on the client as well, it is necessary that the store-client is synchronized with the store-server.
+
+For example in the page _posts_ (`posts.js`) all posts are retrieved from the API, so they can be rendered and actually are. When this HTML reaches the client and is hydrated, if the client-store has not been provided with the data collected on the server, it will not match the same structure received from the server, generating an error.
+
+To synchronize the two stores, the entire state accumulated on the server is _serialized_ and appended to the `window` object under `__INITIAL__STATE__`. In this way the client can extrapolate it and use it as `initialState` in the creation of the store on the client.
 
 ---
 
@@ -79,3 +89,25 @@ The _Link_ component under the _F_ namespace extends the homonym offered by the 
 
 It is identical to the previous one. However, if both _prepopulate_ and _initStore_ are present on a page, precedence is given to the latter, thus ignoring the former.
 Basically it allows you to inform the server to fetch that data which you just cannot do without, or so heavy that it is preferable not to entrust the recovery to the client.
+
+---
+
+### Authentication
+
+Nel contesto del SSR il modo più semplice per gestire l'autenticazione è quello basato sui **cookie**.
+
+Trovo più semplice comprenderne il significato di tale asserzione immaginando di aver implementato un sistema di autenticazione dove un _json-web-token_ è inserito nell'header **Authentication**.
+Supponiamo che l'utente voglia accedere _direttamente_ alla pagina `/secret`. Questa route richiede che l'utente sia autenticato. Essendo questa la prima richiesta fatta dall'utente al server, non è ancora stato eseguito nessuno script, quindi non è stato possibile reperire e aggiungere il _jwt_ alla richiesta. Il risultato è che l'utente che visita direttamente una route protetta verrebbe sempre rimbalzato al login.
+
+Diversamente, delegando il _jwt_ nel **cookie**, essendo esso associato al dominio del sito, verrà incluso anche nella prima richiesta. In questo modo il server può estrapolarlo, associarlo a tutte le richieste che verranno fatte verso l'API e dunque risultare autenticato.
+
+Nel caso della mia implementazione, l'eventuale cookie è passato alla funzione in carica di generare lo store di redux. Qui viene stabilita una _axiosInstance_ dove, oltre a specificare il _baseURL_, vengono settati gli headers tra cui il cookie. Questa _axiosInstance_ è passata come estensore del _thunk-middleware_, diventanto dunque reperibile nelle actions.
+
+In the context of the **SSR**, the simplest way to manage authentication is based on **cookies**.
+
+I find it easier to understand the meaning of this statement by imagining what happens with an implementation that provides a _json-web-token_ provided under the _Authentication_ header.
+Suppose the user wants to _direct_ access the `/secret` page. This route requires the user to be authenticated. Since this is the first request made by the user to the server, no script has yet been executed, so it has not been possible to find and add the _jwt_ to the request. The result is that the user visiting a secure route directly would always be bounced on login.
+
+Otherwise, by delegating the _jwt_ in the **cookie**, since it is associated with the site domain, it will also be included in the first request. In this way the server can extrapolate it, associate it with all the requests that will be made to the API and therefore be authenticated.
+
+In the case of my implementation, any cookie is passed to the function in charge of generating the redux store. Here an _axiosInstance_ is established where, in addition to specifying the _baseURL_, the headers including the cookie are set. This _axiosInstance_ is passed as an extender of the _thunk-middleware_, thus becoming available in the actions.
